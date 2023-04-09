@@ -1,0 +1,18 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: The <code>Data</code> class that provides for the infromation exchange.
+- text: Objects of the same name that store information for requests and responses.
+- text: Encoded <code>str</code> variables.
+- text: Only data strings. You need to do everything by yourself.
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17334#comment
+status: Solved
+record: -1
+local_check: false

@@ -1,0 +1,22 @@
+type: code
+files:
+- name: main.py
+  visible: true
+  text: |-
+    from flask import Flask, render_template
+
+    app = Flask('main')
+    app.app_context()
+
+    @app.route()
+    @app.route()
+     # your code
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17354#comment
+status: Failed
+feedback:
+  message: |
+    Failed. Time limit exceeded
+  time: "Wed, 29 Mar 2023 21:20:00 UTC"
+record: -1
+submission_language: python3

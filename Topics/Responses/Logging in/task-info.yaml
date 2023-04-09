@@ -1,0 +1,19 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: "No, we must create the correct answer initially."
+- text: "Yes, we can modify a response but only the body, not the headers."
+- text: We can modify a response only if we enable <code>ALLOW_RESPONSE_EDIT</code>
+    in settings.
+- text: "Yes, we have a <code>response</code> object that can be changed. "
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17395#comment
+status: Solved
+record: -1
+local_check: false

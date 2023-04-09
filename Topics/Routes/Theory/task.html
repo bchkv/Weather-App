@@ -1,0 +1,74 @@
+<h2>Routes</h2>
+<div class="step-text">
+<p>Any site supports several types of addresses that users can access. For each address, a site uses a function that displays its content — a view function. For example, a list of movies is sorted by a particular tag. These pairs (a URL and a view function) make up a simple <strong>route</strong>. In this topic, we will discuss routes and ways to use them in your app.</p>
+<h5 id="simple-routes">Simple routes</h5>
+<p>As described above, the routes connect the application's URL paths to functions that contain the content for these paths. For example, when users access <code class="language-python">/about/</code>, we may want to execute the <code class="language-python">render_about()</code> function to show the particular content. Similarly, when they type in <code class="language-python">/products/</code>, we would like to run <code class="language-python">render_products()</code>. It is a method that returns different data. </p>
+<p>To bind a URL with a view function, Flask uses <strong>decorators.</strong> Here's how we can create a route:</p>
+<pre><code class="language-python">@app.route('/')
+def hello_world():
+    return 'Hello World!'</code></pre>
+<p>After starting the local server, we will see the following:</p>
+<p><img alt="starting the local server" height="108" src="https://ucarecdn.com/5981c973-35a4-4a1d-b5e5-2c2e08167862/-/crop/432x108/0,40/-/preview/" width="432"/></p>
+<p> </p>
+<p></p><div class="alert alert-primary">If you enter a path that is not registered in any router, the server will output the <code class="language-python">Not Found</code> error.</div>
+<p> </p>
+<h5 id="handling-routes">Handling routes</h5>
+<p>In the simplest case, one URL corresponds to one function. Let's create two routes for our app: one for the main page and one for the information page at <code class="language-python">/about</code>. We can do it by declaring view functions just like with the <code class="language-python">Hello world</code> above:</p>
+<pre><code class="language-python">@app.route('/')  
+def render_main():  
+    return 'This is the main page'
+
+@app.route('/about')  
+def render_about():  
+    return 'Project Information'</code></pre>
+<p>Yay, our mini-site has two pages already!</p>
+<p>One of the important properties of a decorator is the ability to use multiple decorators for a single function. Suppose we have several pages that are under development. What we want to show is a message about it. We can do the following:</p>
+<pre><code class="language-python">@app.route('/all')
+@app.route('/about')
+def construction_site():
+    return render_template('construction_site.html')</code></pre>
+<p>In this case, we will display one HTML page for both <code class="language-python">/all/</code> and <code class="language-python">/about/</code>.</p>
+<h5 id="passing-parameters">Passing parameters</h5>
+<p>Sometimes we need to output dynamic content depending on the parameter that users requested in the address bar. For example, we need to show different profile pages for every employee. Creating thousands of routes like <code class="language-python">/employee/Ivan/</code>, <code class="language-python">employee/Anna/</code>, or <code class="language-python">employee/Alex/</code> is nothing but a headache. Don't worry; Flask has our back! It's time to learn how to do it like a pro. In the example with employees, we would need to designate the variable name variable in the route and pass it to the function as a parameter:</p>
+<pre><code class="language-python">@app.route('/employee/&lt;name&gt;/')
+def show_profile(name):
+    return "Employee Name: " + name</code></pre>
+<p>Let's see what happens. If you use <code class="language-python">0.0.0.0:5000</code> and open the following link <code class="language-python">http://0.0.0.0:5000/employee/Ivan/</code>:</p>
+<p><img alt="address bar with one parameter" height="85" src="https://ucarecdn.com/26334e9c-ba35-4457-a938-c9895c1baa30/-/crop/427x85/0,40/-/preview/" width="427"/></p>
+<p>In the example above, the value inside the <code class="language-python">&lt;&gt;</code> brackets indicates a variable that allows us to declare route rules. In this case, the rule is that the <code class="language-python">show_profile</code> function will handle every request matching the <code class="language-python">/employee/&lt;name&gt;/</code> template.</p>
+<h5 id="passing-several-parameters">Passing several parameters</h5>
+<p>Sometimes we need to accept several parameters from the address bar for a single route. For example, we have a site on movies. It stores two characteristics — a title and genre: <code class="language-python">movies.com/movies/horror/saw/</code></p>
+<p>To pass them, use the following pattern:</p>
+<pre><code class="language-python">@app.route('/movies/&lt;genre&gt;/&lt;title&gt;/')
+def render_movie(genre, title):
+    return "There will be a " + genre+ " movie " + title + "here"</code></pre>
+<p>Let's get it going. When you start the app and go to <code class="language-python">http://127.0.0.1:5000/movies/horror/saw/</code>, you'll get a page with the specified message:</p>
+<p><img alt="address bar with several parameters" height="111" src="https://ucarecdn.com/57a29156-fe33-40b5-bf31-b1e7026d7717/-/crop/457x111/0,35/-/preview/" width="457"/></p>
+<p>Of course, these are the simplest cases. In real life, you'll be probably processing these values and using them for filtering.</p>
+<h5 id="type-conversion">Type conversion</h5>
+<p>A URL is a string, so the data obtained from it is passed to the function in the form of a string. You can see it yourself by using <code class="language-python">type()</code>. Create a route and go to <code class="language-python">/movies/1/</code>:</p>
+<pre><code class="language-python">@app.route('/movies/&lt;movies_id&gt;/')
+def render_movies(movies_id):
+    print(type(movies_id))
+    return ""</code></pre>
+<p>You will see <code class="language-python">&lt;class 'str'&gt;</code> in the console.</p>
+<p>However, we don't always need a string. Flask allows us to change the immediate type of a variable:</p>
+<p><code class="language-python">@app.route('/movies/&lt;int:movies_id&gt;/')</code></p>
+<p><code class="language-python">@app.route('/movies/&lt;float:movies_id&gt;/')</code></p>
+<p>Try changing the code the following way:</p>
+<pre><code class="language-python">@app.route('/movies/&lt;int:movies_id&gt;/')
+def render_book(movies_id):
+    print(type(movies_id))
+    return ""</code></pre>
+<p>You will see <code class="language-python">&lt;class 'int'&gt;</code> in the console.</p>
+<p>Flask accepts a few other variable types. If you feel curious, refer to the <a href="https://flask.palletsprojects.com/en/2.0.x/api/#url-route-registrations" rel="noopener noreferrer nofollow" target="_blank">Official Documentation</a>.</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>We have discussed the basics of routes; we know how to take one or more parameters in the address bar and change their type. Here are quick notes:</p>
+<ul>
+<li>Routes bind a URL to a view function;</li>
+<li>A view function responds to the request and returns some data;</li>
+<li>An <code class="language-python">@app.route</code> decorator binds a URL and a function in Flask;</li>
+<li>Routes can be generated dynamically by accepting variables.</li>
+</ul>
+<p>It's time to put what we've learned into practice!</p>
+</div>

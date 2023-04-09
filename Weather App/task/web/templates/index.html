@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block cards %}
+<div class="cards">
+    {% for city_weather_data in cities_weather_data %}
+    <div class="card {{ city_weather_data['time_of_day'] }}">
+        <div class="delete-wrapper">
+            <form action="delete/{{ city_weather_data['id'] }}" method="POST">
+                <input type="hidden" name="id" value="{{ city_weather_data['id'] }}">
+                <button class="delete-button" type="submit">&#10006;</button>
+            </form>
+        </div>
+        <div class="degrees"><span>{{ city_weather_data['temperature'] }}<span class="celsius"> °C</span></span></div>
+        <div class="state">{{ city_weather_data['description'] }}</div>
+        <div class="city">{{ city_weather_data['city_name'] }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

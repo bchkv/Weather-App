@@ -1,0 +1,89 @@
+<h2>Requests</h2>
+<div class="step-text">
+<p>It's time to refine our Flask skills and learn some important concepts. Today, we will talk about <strong>requests</strong>. They may seem relatively simple: a client sends a request; a server responds to it and sends a response back. Programming this sequence requires some amount of practical knowledge. We will cover it in this topic. Ready? Go!</p>
+<h5 id="requests-and-responses-as-objects">Requests and responses as objects</h5>
+<p>Let's talk about the basics first. As you may know, there are two main request types — <code class="language-python">GET</code> and <code class="language-python">POST</code>. Don't forget that these are only the names; HTTP does not oblige you to use <code class="language-python">GET</code> to obtain information and <code class="language-python">POST</code> to forward it. Though that is what is most often implied. With the help of HTTP requests, we can send data, receive a response, and establish a connection between our computer and a server via the HTTP protocol. You can say that everything sounds familiar, then why repeat? That's a good point to step in and start discussing Flask features.</p>
+<p>All data transmissions in Python are processed as objects. Namely, a request and response. As you may have guessed, these objects contain data about a request or response that a server sent or received. When you create an application, run it, and open the URL (<code class="language-python">127.0.0.1:5000</code>), the browser sends a request logged in to the console immediately. If everything is fine, you will see the <code class="language-python">200</code> response status code:</p>
+<p style="text-align: center;"><img alt="200 response status code" height="160" src="https://ucarecdn.com/7cabe99a-42a2-4a5f-a52d-77bc6bc9b48a/" width="800"/></p>
+<p>You can see that first is the IP address of the client who accessed our application (<code class="language-python">127.0.0.1</code>), the time the request was received, the request type, the requested address, and the final server response — an HTTP code.</p>
+<p>All these things are available in Flask, thanks to a library called <a href="https://palletsprojects.com/p/werkzeug/#:~:text=Werkzeug%20is%20a%20comprehensive%20WSGI,most%20advanced%20WSGI%20utility%20libraries.&amp;text=A%20threaded%20WSGI%20server%20for%20use%20while%20developing%20applications%20locally." rel="noopener noreferrer nofollow" target="_blank">Werkzeug</a>. We will mention it here and there because Flask draws on it. We'll cover the library in detail in later topics. Still, it is essential (and enough) to say that Werkzeug provides a set of utilities to enable a Python application to communicate to a web server by processing requests and responses.</p>
+<h5 id="processing-requests">Processing requests</h5>
+<p>Now, let's write our application that will handle requests and see how we can process them. Imagine that we want to create an authorization system. What do we need? That's right — a page that will have a form for a username and password. It will send the data to the server as an authentication request. </p>
+<p>Firstly, we need to import Flask as well as <code class="language-python">request</code>, a new object we will work with:</p>
+<pre><code class="language-python">from flask import Flask
+from flask import request</code></pre>
+<p>The imported <code class="language-python">request</code> is a <strong>global object</strong> that Flask uses to put the correct incoming request data in it. The <code class="language-python">request</code> object is an instance of a built-in <code class="language-python">Request</code> (note the capital letter!) subclass. Since we are not sending but mostly accepting requests, we don't need to create any new instances. It may sound a bit confusing, but at this point, let's carry on with the global object idea.</p>
+<p>Once the import is complete, we can create our application:</p>
+<pre><code class="language-python">app = Flask('main')</code></pre>
+<p>Ok, the foundation is ready. Now it's time to build the central part of the program. Before writing a function, we route<strong> </strong>the page using the familiar decorator. Note that this time, we add the <code class="language-python">methods</code> parameter to show Flask which requests our app will accept:</p>
+<pre><code class="language-python">@app.route('/', methods=['POST', 'GET'])</code></pre>
+<p>Flask route only answers to <code class="language-python">GET</code> requests by default. Pass them into the list when defining the decorator to make the route able to handle other requests.</p>
+<p>Now, let's declare a <strong>view function</strong> called <code class="language-python">login</code>. </p>
+<p>With the help of the <code class="language-python">method</code> attribute of the <code class="language-python">request</code> object, we can determine the request type and specify the behavior of the application: </p>
+<pre><code class="language-python">def login():
+    if request.method == 'GET':
+        template = """
+        &lt;form method='POST'&gt;
+        &lt;input type='text' placeholder='Username...'&gt;
+        &lt;input type='password' placeholder='Password...'&gt;
+        &lt;input type='submit' value='Auth'&gt;
+        &lt;/form&gt;
+        """
+        return template
+
+    elif request.method == 'POST':
+        return 'Wow! Great, you logged in!'</code></pre>
+<p>We have created a template that we will show on the login page. You'll study building and showing templates in detail later. For now, you can copy and paste the template string into your code to make everything work.</p>
+<p>Finally, let's launch our app:</p>
+<pre><code class="language-python">app.run()</code></pre>
+<h5 id="what-it-looks-like">What it looks like</h5>
+<p>Run the program and make sure that everything works. You will see the following messages in the console:</p>
+<p style="text-align: center;"><img alt="template string into code" height="136" src="https://ucarecdn.com/c2152a9a-2979-4355-ac4a-37ec884734fa/" width="738"/></p>
+<p>Now we can go to the app page and see how everything works:</p>
+<p style="text-align: center;"><img alt="empty page creation " height="126" src="https://ucarecdn.com/fcaf5dc2-f643-4fa3-a7a3-2ef8d1b066af/" width="465"/></p>
+<p>Let's enter some data (even though, for now, it is just a formality, as the authorization system is not implemented) and click on the button. We will see the message that we specified earlier:</p>
+<p style="text-align: center;"><img alt="displayed message on the page" height="128" src="https://ucarecdn.com/8792b390-41b5-4385-a19e-e4c2a4b604b3/" width="345"/></p>
+<p>Wonderful! We can use the conditional construction and the <code class="language-python">request</code> object, the <code class="language-python">method</code> attribute, in particular, to determine whether users send data to us or want to see a web page. Below you can see the entire code:</p>
+<pre><code class="language-python">from flask import request
+from flask import Flask
+
+
+app = Flask('main')
+
+@app.route('/', methods=['POST', 'GET'])
+def login():
+    if request.method == 'GET':
+        template = """
+        &lt;form method='POST'&gt;
+        &lt;input type='text' placeholder='Username...'&gt;
+        &lt;input type='password' placeholder='Password...'&gt;
+        &lt;input type='submit' value='Auth'&gt;
+        &lt;/form&gt;
+        """
+        return template
+
+    elif request.method == 'POST':
+        return 'Wow! Great, you logged in!'
+
+
+app.run()
+</code></pre>
+<h5 id="query-parameters">Query parameters</h5>
+<p>Using query strings or <strong>query parameters </strong>is another way to send data with your request. They are added to the main request URL, separated by a question mark <code class="language-python">?</code>. Query parameters are made of <code class="language-python">key=value</code> pairs separated by an ampersand <code class="language-python">&amp;</code>. An example request URL with a query string looks like this:</p>
+<pre><code class="language-no-highlight">http://127.0.0.1:5000/users?city=London&amp;age=20</code></pre>
+<p>Query parameters are commonly used for filtering or limiting data. In the example above, say we have a <code class="language-python">/users</code> endpoint that returns all the users present in a database. Sometimes, we don't need them all, and that's where it's easier to specify what kind of users the client exactly wants to see, even before sending a request. In this case, the server will filter only users from London, age 20.</p>
+<p>Query parameters are also stored in the <code class="language-python">request</code> object. You'll need its <code class="language-python">args</code> attribute:</p>
+<pre><code class="language-python">@app.route('/users')
+def users():
+    query_params = request.args  # returns a dictionary
+    city = query_params.get("city")
+    age = query_params.get("age")
+    # ... do your magic with the params
+    # considering you've had the predefined method 'get_users' for retrieving users
+    result = get_users(city, age)
+    return result</code></pre>
+<p>As the <code class="language-python">args</code> attribute returns a dictionary; you can use the standard dictionary methods. Here, we've retrieved parameters via <code class="language-python">get()</code> method to avoid crashing with the <code class="language-python">KeyError</code> exception.</p>
+<p>Besides <code class="language-python">method</code> and <code class="language-python">args</code> attributes, the request object has a few more frequently used properties. We will cover some of them in the following topics, but if you're curious now, you can check out the <a href="https://flask.palletsprojects.com/en/2.0.x/api/#flask.Request" rel="noopener noreferrer nofollow" target="_blank">class flask.Request</a> part of the documentation.</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we have found that we work with requests and responses as with objects in Flask. We have also learned how to process different types of requests with a view function, discovered what query parameters are, and tried to return different messages. Let's go and practice what we have learned!</p>
+</div>

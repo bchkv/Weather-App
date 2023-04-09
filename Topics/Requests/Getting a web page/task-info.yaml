@@ -1,0 +1,19 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: "POST will send a request, and the server must process it and return a response\
+    \ with the page."
+- text: "Both GET and POST, depending on the developer."
+- text: "GET is the method to get the data, and we don't need to send any."
+- text: This type of request can't be called because we haven't specified the type.
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17336#comment
+status: Solved
+record: -1
+local_check: false

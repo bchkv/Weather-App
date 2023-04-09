@@ -1,0 +1,18 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: To create a response object with JSON data.
+- text: To make a prettier JSON file.
+- text: To convert a non-JSON file to JSON data.
+- text: To create a JSON file with specified name.
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17394#comment
+status: Solved
+record: -1
+local_check: false

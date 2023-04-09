@@ -1,0 +1,66 @@
+<h2>Responses</h2>
+<div class="step-text">
+<h5 id="getting-started-with-responses">Getting started with responses</h5>
+<p>In this topic, we will talk about responses and how our application can send them. Let's start with a simple template for our new app. As always, we need to import it first. Mind the new <code class="language-python">make_response</code> method: </p>
+<pre><code class="language-python">from flask import Flask
+from flask import make_response
+
+app = Flask('main')</code></pre>
+<p>In most cases, returning a simple string as a response is not enough. We'll need a <code class="language-python">response</code> object, an instance of the <code class="language-python">Response</code> class. It allows us to set up special properties such as adding headers to an ordinary web page (or rather to the response that returns it), specify the language that is used for the web page, list the allowed methods, like <code class="language-python">POST</code>, <code class="language-python">PUT</code>, <code class="language-python">GET</code>, and many more.</p>
+<p>We can create a response object in Flask with the <code class="language-python">make_response</code> method:</p>
+<pre><code class="language-python">@app.route('/')
+def index():
+    response = make_response('&lt;h1&gt;The Main Page, OK?&lt;/h1&gt;')
+    return response</code></pre>
+<p> </p>
+<p></p><div class="alert alert-primary"> Remember we are placing the <code class="language-python">app.route</code> decorator before any function that should handle a page path.</div>
+<p> </p>
+<p>Let's now take a look at what we can do with it:</p>
+<pre><code class="language-python">@app.route('/data/get_error/')
+def return_error():
+    response = make_response('&lt;p&gt;Oops... Sounds like an error!&lt;/p&gt;', 400)
+    return response</code></pre>
+<p>We route our page to <code class="language-python">/data/get_error/</code>, so the page can be accessed at <code class="language-python">127.0.0.1:5000/data/get_error/</code>.</p>
+<p> </p>
+<p></p><div class="alert alert-primary">When routing, always start a URL with a slash.</div>
+<p> </p>
+<p>In this example, we have created a response that contains an HTML template string for a specific page as well as the number <code class="language-python">400</code>. The number means that we return data with the HTTP status-code <code class="language-python">400</code> that indicates an error. So, we can inform users, for example, that at the moment, the page is closed and under construction without knocking down the whole program.</p>
+<p>Time to look at our results! First, go to the main page of the app:</p>
+<p style="text-align: center;"><img alt="main page" height="138" src="https://ucarecdn.com/9770665c-765e-4ba9-a1a1-635389626744/" width="472"/></p>
+<p>Looks pretty good, doesn't it? And now, let's stir the pot and go to <code class="language-python">/data/get_error/</code>:</p>
+<p style="text-align: center;"><img alt="/data/get_error/" height="119" src="https://ucarecdn.com/9d3455f5-4f1c-4132-a8a2-63a5a9ea8a14/" width="388"/></p>
+<p>Holy cats! Who would have thought that this page contains an error! Let's look at the console and make sure that Flask really returned this page with the error code:</p>
+<p style="text-align: center;"><img alt="page contains an error" height="202" src="https://ucarecdn.com/dabd9af6-bfc4-4d43-9c24-e3eb1bbefcd5/" width="773"/></p>
+<h5 id="the-jsonify-method">The jsonify method</h5>
+<p>Now, we'll switch to another useful method <code class="language-python">jsonify</code>. Sometimes, it is necessary to send a response that does not contain a web page but actual information, a piece of data that is processed by another machine or program, for example. Usually, we refer to the JSON format for this. The <code class="language-python">jsonify</code> method helps us to create a proper <code class="language-python">response</code> object from JSON output. Let's start with the import:</p>
+<pre><code class="language-python">from flask import Flask
+from flask import jsonify
+
+app = Flask('main')</code></pre>
+<p>Wonderful! Now, onto the main part — the function. We will use <code class="language-python">jsonify</code> and route it to <code class="language-python">/</code> to create a response:</p>
+<pre><code class="language-python">@app.route('/')
+def no_data():
+    response = jsonify({'message': 'Hello there!', 'info': 'Using jsonify...', 'status': 200})
+
+    return response</code></pre>
+<p>As you can see, we have a regular dictionary with data. The <code class="language-python">jsonify</code> method puts it into a JSON object. <code class="language-python">Jsonify</code> returns a response object, so we don't have to process it with <code class="language-python">make_response</code>.</p>
+<p>After that, we can launch the application with <code class="language-python">app.run()</code>! Go to <code class="language-python">127.0.0.1:5000</code>, and you will see the following:</p>
+<p style="text-align: center;"><img alt="app.run()" height="125" src="https://ucarecdn.com/77342ba6-3651-429c-b67b-1ae39d8f9aa3/" width="510"/></p>
+<p>That's how we can send a response with JSON data. In this case, the JSON object will be displayed on the page since we haven't specified how our app should use it. We will get back to this in later topics. Below is the full code of our app: </p>
+<pre><code class="language-python">from flask import Flask
+from flask import jsonify
+
+
+app = Flask('main')
+
+@app.route('/')
+def no_data():
+    response = jsonify({'message': 'Hello there!', 'info': 'Using jsonify...', 'status': 200})
+
+    return response
+
+app.run()
+</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p>We have learned how to create responses from scratch using two methods: <code class="language-python">make_response()</code> and <code class="language-python">jsonify</code>. The first one handles simple responses, while the second collects data into a JSON object. We are glad that you have reached this point. Carry on!</p>
+</div>

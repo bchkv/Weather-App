@@ -1,0 +1,21 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: "Thanks to them, the server can quickly understand what data to attach to\
+    \ a response."
+- text: "With their help, we can immediately find out the result of the request without\
+    \ delving into the internal data."
+- text: To be able to track requests.
+- text: So that the developer could send responses with an error code and no one could
+    access the website.
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/17393#comment
+status: Solved
+record: -1
+local_check: false
